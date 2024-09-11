@@ -1648,6 +1648,37 @@ public class WebHandler {
         }
     }
 
+    public void addStack(HttpServerExchange exchange) {
+        FormData data = exchange.getAttachment(FormDataParser.FORM_DATA);
+
+        try {
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "application/json");
+
+            String username = data.getFirst("user").getValue();
+            int count = Integer.parseInt(data.getFirst("count").getValue());
+
+            if (count < 0) {
+                exchange.setStatusCode(StatusCodes.BAD_REQUEST);
+                return;
+            }
+
+            User user = App.getUserManager().getByName(username);
+            if (user == null) {
+                exchange.setStatusCode(StatusCodes.NOT_FOUND);
+                return;
+            }
+
+            user.setStacked(user.getStacked() + count);
+
+            JSONObject json = new JSONObject();
+            json.put("status", "success");
+
+            exchange.getResponseSender().send(json.toString(4));
+        } catch (NullPointerException | NumberFormatException ex) {
+            exchange.setStatusCode(StatusCodes.BAD_REQUEST);
+        }
+    }
+
     public void profile(HttpServerExchange exchange) {
         exchange.getResponseHeaders()
                 .put(Headers.CONTENT_TYPE, "application/json");
