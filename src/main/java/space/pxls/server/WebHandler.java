@@ -24,7 +24,6 @@ import space.pxls.util.*;
 
 import java.io.*;
 import java.net.URLEncoder;
-import java.nio.ByteBuffer;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -1618,7 +1617,7 @@ public class WebHandler {
         }
     }
 
-    public void setStacked(HttpServerExchange exchange) {
+    public void setStack(HttpServerExchange exchange) {
         FormData data = exchange.getAttachment(FormDataParser.FORM_DATA);
 
         try {
