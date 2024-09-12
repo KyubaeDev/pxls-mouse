@@ -51,17 +51,20 @@ public class PacketHandler {
         bonusTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                System.out.println("Tick! Users to process: " + userBonuses.size());
-                List<User> usersToRemove = new ArrayList<>();
-                userBonuses.forEach(user -> {
-                    if (!user.undoWindowPassed()) return;
-                    int stack = Math.min(user.getStacked() + (App.getStackTwitchBonus() - 1), App.getStackMaxStacked());
-                    System.out.println("Processing user " + user.getName() + ", stack to set to: " + stack + " --- min(" + user.getStacked() + " + (" + App.getStackTwitchBonus() + " - 1), " + App.getStackMaxStacked() + ")");
-                    user.setStacked(stack);
-                    usersToRemove.add(user);
-                });
-                System.out.println("Users to remove: " + usersToRemove.size());
-                usersToRemove.forEach(userBonuses::remove);
+                try {
+                    Iterator<User> iterator = userBonuses.iterator();
+                    while (iterator.hasNext()) {
+                        User user = iterator.next();
+
+                        if (!user.undoWindowPassed()) return;
+                        int stack = Math.min(user.getStacked() + (App.getStackTwitchBonus() - 1), App.getStackMaxStacked());
+                        user.setStacked(stack);
+
+                        iterator.remove();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }, 500L, 500L);
     }
@@ -311,7 +314,6 @@ public class PacketHandler {
                                     user.setCooldown(seconds);
                                     if (user.isTwitchSubbed()) {
                                         // worse idea?
-                                        System.out.println(user.getName() + " now waiting for bonus");
                                         PacketHandler.userBonuses.add(user);
                                     }
                                     App.getDatabase().updateUserTime(user.getId(), seconds);
