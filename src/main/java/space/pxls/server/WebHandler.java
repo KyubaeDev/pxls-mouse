@@ -1638,6 +1638,7 @@ public class WebHandler {
             }
 
             user.setStacked(count);
+            App.getServer().getPacketHandler().sendAvailablePixels(user, "override");
 
             JSONObject json = new JSONObject();
             json.put("status", "success");
@@ -1669,6 +1670,7 @@ public class WebHandler {
             }
 
             user.setStacked(user.getStacked() + count);
+            App.getServer().getPacketHandler().sendAvailablePixels(user, "override");
 
             JSONObject json = new JSONObject();
             json.put("status", "success");

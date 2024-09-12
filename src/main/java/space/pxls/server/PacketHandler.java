@@ -36,6 +36,30 @@ public class PacketHandler {
     private int numAllCons = 0;
     private int previousUserCount = 0;
 
+    private static final Set<User> userBonuses = new HashSet<>();
+
+    /**
+     * Starts the Twitch subscriber bonus timer.
+     * <p>
+     * When a user places the last pixel available, they will be added to userBonuses, which is a set of people needing
+     * their bonus pixels applied. If their undo window has passed (preventing getting +5 per undo), apply the bonus
+     * and remove them from the set in bulk per tick.
+     */
+    public static void startBonusTimer() {
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                List<User> usersToRemove = new ArrayList<>();
+                userBonuses.forEach(user -> {
+                    if (!user.undoWindowPassed()) return;
+                    user.setStacked(Math.min(user.getStacked() + (App.getStackTwitchBonus() - 1), App.getStackMaxStacked()));
+                    usersToRemove.add(user);
+                });
+                usersToRemove.forEach(userBonuses::remove);
+            }
+        }, 500L, 500L);
+    }
+
     public int getCooldown() {
         Config config = App.getConfig();
 
@@ -187,6 +211,7 @@ public class PacketHandler {
                     user.setStacked(user.getStacked() + 1);
                     sendAvailablePixels(user, "undo");
                 }
+                PacketHandler.userBonuses.remove(user);
                 user.setCooldown(0);
                 DBPixelPlacementFull lastPixel = App.getDatabase().getPixelByID(null, thisPixel.secondaryId);
                 if (lastPixel != null) {
@@ -279,13 +304,8 @@ public class PacketHandler {
                                     user.setLastPlaceWasStack(false);
                                     user.setCooldown(seconds);
                                     if (user.isTwitchSubbed()) {
-                                        // bad idea?
-                                        new Timer().schedule(new TimerTask() {
-                                            @Override
-                                            public void run() {
-                                                user.setStacked(App.getStackTwitchBonus() - 1);
-                                            }
-                                        }, seconds * 1000L);
+                                        // worse idea?
+                                        PacketHandler.userBonuses.add(user);
                                     }
                                     App.getDatabase().updateUserTime(user.getId(), seconds);
                                     sendAvailablePixels(user, "consume");
@@ -378,7 +398,7 @@ public class PacketHandler {
     }
 
     public void sendAvailablePixels(WebSocketChannel ch, User user, String cause) {
-        server.send(ch, new ServerPixels(user.getAvailablePixels(), cause));
+        server.send(ch, new ServerPixels(user.getAvailablePixels(cause.equals("override")), cause));
     }
     public void sendAvailablePixels(User user, String cause) {
         for (WebSocketChannel ch : user.getConnections()) {

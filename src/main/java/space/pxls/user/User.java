@@ -517,9 +517,9 @@ public class User {
         return this.pixelCountAllTime;
     }
 
-    public int getAvailablePixels() {
+    public int getAvailablePixels(boolean override) {
         boolean canPlace = canPlace();
-        if (!canPlace) return 0;
+        if (!canPlace && !override) return 0;
 
         return (canPlace ? 1 : 0) + this.stacked;
     }

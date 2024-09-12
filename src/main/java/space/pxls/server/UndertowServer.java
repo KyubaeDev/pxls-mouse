@@ -47,6 +47,7 @@ public class UndertowServer {
 
         webHandler = new WebHandler();
         socketHandler = new PacketHandler(this);
+        PacketHandler.startBonusTimer();
         connections = ConcurrentHashMap.newKeySet();
     }
 
