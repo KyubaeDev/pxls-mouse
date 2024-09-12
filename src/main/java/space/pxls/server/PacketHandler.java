@@ -37,6 +37,7 @@ public class PacketHandler {
     private int previousUserCount = 0;
 
     private static final Set<User> userBonuses = new HashSet<>();
+    private static Timer bonusTimer;
 
     /**
      * Starts the Twitch subscriber bonus timer.
@@ -46,7 +47,8 @@ public class PacketHandler {
      * and remove them from the set in bulk per tick.
      */
     public static void startBonusTimer() {
-        new Timer().schedule(new TimerTask() {
+        bonusTimer = new Timer();
+        bonusTimer.schedule(new TimerTask() {
             @Override
             public void run() {
                 List<User> usersToRemove = new ArrayList<>();
