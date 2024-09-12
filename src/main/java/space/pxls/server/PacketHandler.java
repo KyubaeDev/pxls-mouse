@@ -56,7 +56,7 @@ public class PacketHandler {
                     while (iterator.hasNext()) {
                         User user = iterator.next();
 
-                        if (!user.undoWindowPassed()) return;
+                        if (!user.undoWindowPassed()) continue;
                         int stack = Math.min(user.getStacked() + (App.getStackTwitchBonus() - 1), App.getStackMaxStacked());
                         user.setStacked(stack);
 
