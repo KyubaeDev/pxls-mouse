@@ -658,6 +658,7 @@ public class User {
     }
 
     public void setTwitchSubbed(boolean isTwitchSubbed) {
+        twitchSubbed = isTwitchSubbed;
         App.getDatabase().setTwitchSubbed(id, isTwitchSubbed);
     }
 
