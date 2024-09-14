@@ -1,6 +1,5 @@
 package space.pxls.server.packets.http;
 
-import com.typesafe.config.ConfigObject;
 import space.pxls.auth.AuthService;
 import space.pxls.palette.Color;
 
@@ -18,6 +17,7 @@ public class CanvasInfo {
     public Integer heatmapCooldown;
     public Integer maxStacked;
     public Integer twitchBonus;
+    public Boolean twitchSubOnlyPlacement;
     public Map<String, AuthService> authServices;
     public Boolean registrationEnabled;
     public Boolean snipMode;
@@ -25,7 +25,7 @@ public class CanvasInfo {
     public String corsParam;
     public LegalInfo legal;
 
-    public CanvasInfo(String canvasCode, Integer width, Integer height, List<Color> palette, Boolean endOfCanvas, CooldownInfo cooldownInfo, String captchaKey, Integer heatmapCooldown, Integer maxStacked, Integer twitchBonus, Map<String, AuthService> authServices, Boolean registrationEnabled, boolean snipMode, String corsBase, String corsParam, LegalInfo legal) {
+    public CanvasInfo(String canvasCode, Integer width, Integer height, List<Color> palette, Boolean endOfCanvas, CooldownInfo cooldownInfo, String captchaKey, Integer heatmapCooldown, Integer maxStacked, Integer twitchBonus, Boolean twitchSubOnlyPlacement, Map<String, AuthService> authServices, Boolean registrationEnabled, boolean snipMode, String corsBase, String corsParam, LegalInfo legal) {
         this.canvasCode = canvasCode;
         this.width = width;
         this.height = height;
@@ -36,6 +36,7 @@ public class CanvasInfo {
         this.heatmapCooldown = heatmapCooldown;
         this.maxStacked = maxStacked;
         this.twitchBonus = twitchBonus;
+        this.twitchSubOnlyPlacement = twitchSubOnlyPlacement;
         this.authServices = authServices;
         this.registrationEnabled = registrationEnabled;
         this.snipMode = snipMode;
@@ -78,6 +79,10 @@ public class CanvasInfo {
 
     public Integer getTwitchBonus() {
         return twitchBonus;
+    }
+
+    public Boolean getTwitchSubOnlyPlacement() {
+        return twitchSubOnlyPlacement;
     }
 
     public Map<String, AuthService> getAuthServices() {

@@ -170,6 +170,9 @@ public class App {
                     boolean endOfCanvas = config.getBoolean("endOfCanvas");
                     App.getServer().broadcastRaw("{\"type\":\"endOfCanvas\",\"state\":" + endOfCanvas + "}");
                     printStream.println("Sent end of canvas state (" + endOfCanvas + ")");
+                    boolean twitchSubOnlyPlacement = config.getBoolean("oauth.twitch.subOnlyPlacement");
+                    App.getServer().broadcastRaw("{\"type\":\"twitchSubOnlyPlacement\",\"state\":" + twitchSubOnlyPlacement + "}");
+                    printStream.println("Sent Twitch sub only placement state (" + twitchSubOnlyPlacement + ")");
                     printStream.println("Success!");
                 } catch (Exception x) {
                     x.printStackTrace();

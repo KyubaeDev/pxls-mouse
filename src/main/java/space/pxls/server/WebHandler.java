@@ -1394,6 +1394,7 @@ public class WebHandler {
             (int) App.getConfig().getDuration("board.heatmapCooldown", TimeUnit.SECONDS),
             (int) App.getConfig().getInt("stacking.maxStacked"),
             App.getConfig().getInt("stacking.twitchBonus"),
+            App.getConfig().getBoolean("oauth.twitch.subOnlyPlacement"),
             services,
             App.getRegistrationEnabled(),
             App.getSnipMode(),

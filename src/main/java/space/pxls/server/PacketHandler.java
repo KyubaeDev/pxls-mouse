@@ -198,6 +198,9 @@ public class PacketHandler {
         if (App.getConfig().getBoolean("endOfCanvas") && !user.hasIgnoreEndOfCanvas()) {
             return;
         }
+        if (App.getConfig().getBoolean("oauth.twitch.subOnlyPlacement") && !user.isTwitchSubbed()) {
+            return;
+        }
         boolean _canUndo = user.canUndo(true);
         if (!_canUndo || user.undoWindowPassed()) {
             return;
@@ -248,6 +251,9 @@ public class PacketHandler {
 
     private void handlePlace(WebSocketChannel channel, User user, ClientPlace cp, String ip) {
         if (App.getConfig().getBoolean("endOfCanvas") && !user.hasIgnoreEndOfCanvas()) {
+            return;
+        }
+        if (App.getConfig().getBoolean("oauth.twitch.subOnlyPlacement") && !user.isTwitchSubbed()) {
             return;
         }
         if (!cp.getType().equals("pixel")) {

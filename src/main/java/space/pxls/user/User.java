@@ -87,6 +87,7 @@ public class User {
             this.discordName = user.discordName;
             this.displayedFaction = user.displayedFaction;
             this.factionBlocked = user.factionBlocked;
+            this.twitchSubbed = user.twitchSubbed;
         }
     }
 
